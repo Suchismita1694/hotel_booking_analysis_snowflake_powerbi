@@ -1,0 +1,55 @@
+--KPI - AVG Booking Value
+select avg(total_amount) as avg_booking_value
+from gold_booking_clean;
+
+--KPI - Total Guests
+select sum(num_guests)
+from gold_booking_clean;
+
+
+--KPI - Total Bookings
+select count(booking_id) as total_booking
+from gold_booking_clean;
+
+--KPI - Total Revenue
+select sum(total_amount) as total_revenue
+from gold_booking_clean;
+
+--Line Chart - Monthly Revenue
+select month(check_in_date) as month, sum(total_amount) as total_revenue
+from gold_booking_clean
+group by month(check_in_date)
+order by month asc;
+
+
+select month(date) , sum(total_revenue) from gold_agg_daily_booking
+group by month(date)
+order by month(date) asc;
+
+--Line Chart - Monthly Bookings
+
+select month(date) , sum(total_booking) 
+from gold_agg_daily_booking
+group by month(date)
+order by month(date) asc;
+
+--Bar Chart - Top Cities by Revenue
+select * from gold_agg_hotel_city_sales
+where total_revenue is not null
+order by total_revenue desc
+limit 10;
+
+--Bar Chart - Bookings by Status
+select count(*), booking_status
+from gold_booking_clean
+group by booking_status;
+
+
+--Bar Chart - Bookings by Type
+
+select count(*), room_type
+from gold_booking_clean
+where room_type is not null
+group by room_type
+order by count(*) desc;
+
